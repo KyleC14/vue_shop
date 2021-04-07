@@ -8,7 +8,12 @@ import './assets/fonts/iconfont.css'
 import './assets/css/global.css'
 import TreeTable from 'vue-table-with-tree-grid'
 
-
+//导入富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+//导入富文本编辑器所需要的的样式
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
 
 import axios from 'axios'
 //配置请求根路劲
@@ -26,6 +31,21 @@ Vue.prototype.$http = axios;
 Vue.config.productionTip = false
 
 Vue.component('tree-table', TreeTable)
+//全局注册富文本编辑器组件
+Vue.use(VueQuillEditor, /* { default global options } */)
+//全局过滤器 处理时间格式
+Vue.filter('dateFormat', function (originVal) {
+  const dt = new Date(originVal)
+  const year = dt.getFullYear()
+  //从0开始 要加1
+  //不足两位用0填充
+  const month = (dt.getMonth() + 1 + '').padStart(2, '0')
+  const date = (dt.getDate() + '').padStart(2, '0')
+  const hour = (dt.getHours() + '').padStart(2, '0')
+  const minute = (dt.getMinutes() + '').padStart(2, '0')
+  const second = (dt.getSeconds() + '').padStart(2, '0')
+  return `${year}-${month}-${date} ${hour}:${minute}:${second}`
+})
 
 new Vue({
   router,
